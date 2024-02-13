@@ -9,6 +9,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_DATABASE: cc
+          MYSQL_USER: student
+          MYSQL_PASSWORD: student
+        ports:
+          - 3310:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
