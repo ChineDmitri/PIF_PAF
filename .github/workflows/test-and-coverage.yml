@@ -35,6 +35,7 @@ jobs:
 
       - name: Run tests and collect coverage
         run: |
+          result=$(npm run test:ci)
           if echo "$result" | grep -q "not met"; then
             echo "Error: Some tests failed."
             exit 1
