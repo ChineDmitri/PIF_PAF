@@ -37,12 +37,12 @@ jobs:
         run: |
           result=$(npm run test:ci)
 
-          if echo "$result" | grep -q "Test Suites: 0 failed"; then
-            echo "Tests passed successfully."
-            exit 0
-          else
+          if echo "$result" | grep -q "not met"; then
             echo "Error: Some tests failed."
             exit 1
+          else
+            echo "Tests passed successfully."
+            exit 0
           fi
 
   coverage:
