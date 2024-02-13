@@ -34,7 +34,16 @@ jobs:
         run: npm install
 
       - name: Run tests and collect coverage
-        run: npm run test:ci
+        run: |
+          result=$(npm run test:ci)
+
+          if echo "$result" | grep -q "Test Suites: 0 failed"; then
+            echo "Tests passed successfully."
+            exit 0
+          else
+            echo "Error: Some tests failed."
+            exit 1
+          fi
 
   coverage:
     runs-on: ubuntu-latest
