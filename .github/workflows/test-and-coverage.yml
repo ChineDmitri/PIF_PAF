@@ -33,15 +33,21 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Check secrets
-        run: echo ${{ secrets.COVERALLS_REPO_TOKEN }}
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-
       - name: Run tests and collect coverage
-        run: npm run test:ci
+        run: |
+          result=$(npm run test:ci)
+          if echo "$result" | grep -q "not met"; then
+            echo "Error: Some tests failed."
+            exit 1
+          else
+            echo "Tests passed successfully."
+            echo "Continuing execution after test result check..."
+            exit 0
+          fi
 
       - name: Upload coverage to Coveralls
-        run: npm run coveralls
+        run: npm run coveralls  
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+
+ 
