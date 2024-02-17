@@ -22,7 +22,7 @@ describe('UsersController', () => {
           port: 3310,
           username: 'student',
           password: 'student',
-          database: 'cc',
+          database: 'rdv',
           entities: [__dirname + '/**/*.entity{.ts,.js}'],
           synchronize: true,
         }),

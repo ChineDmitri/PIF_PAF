@@ -9,14 +9,16 @@ on:
 
 jobs:
   test-and-coverage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     services:
       mysql:
-        image: mysql:latest
+        image: mysql:8
         env:
+          MYSQL_DB_HOST: localhost
+          MYSQL_DB_PORT: 3310
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: cc
+          MYSQL_DATABASE: rdv
           MYSQL_USER: student
           MYSQL_PASSWORD: student
         ports:

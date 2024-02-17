@@ -7,6 +7,7 @@ export class AppController {
 
   @Get()
   getHello(): string {
+    console.log(process.env.MYSQL_DB_PORT_PROD);
     return this.appService.getHello();
   }
 }
