@@ -9,11 +9,11 @@ on:
 
 jobs:
   test-and-coverage:
-    runs-on: ubuntu-latest
-
+    runs-on: ubuntu-22.04.3
+    
     services:
       mysql:
-        image: mysql:latest
+        image: mysql:8
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: rdv
@@ -31,6 +31,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+
+      - name: Set up environment variables
+        run: |
+          echo "MYSQL_DB_HOST=localhost" >> $GITHUB_ENV
+          echo "MYSQL_DB_PORT=3310" >> $GITHUB_ENV
+          echo "MYSQL_DB_USER=student" >> $GITHUB_ENV
+          echo "MYSQL_DB_PASSWORD=student" >> $GITHUB_ENV
+          echo "MYSQL_DB_DATABASE=rdv" >> $GITHUB_ENV
 
       - name: Install dependencies
         run: npm install
