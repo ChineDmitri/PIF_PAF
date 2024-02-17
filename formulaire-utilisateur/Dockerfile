@@ -2,7 +2,7 @@ FROM node:18.16 AS build-stage
 
 RUN npm install -g @angular/cli@17.2
 
-WORKDIR /app
+WORKDIR . .
 
 COPY package*.json ./
 
@@ -13,4 +13,4 @@ COPY . .
 # Port par défaut du serveur de développement Angluar
 EXPOSE 4200
 
-CMD ["ng", "serve"]
+CMD ["ng", "serve", "--host", "0.0.0.0"]
