@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile.bdd
     image: "rdv-app_bdd:0.0.1"
     ports:
-      - "3310:3306"
+      - "3306:3306"
     networks:
       - backend-network
     environment:
