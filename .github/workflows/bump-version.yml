@@ -42,6 +42,8 @@ jobs:
 
     - name: Bump version
       run: |
+        git config --global user.email "dmitri.chine@gmail.com"
+        git config --global user.name "Dmitri Chine"
         npm version ${{ steps.version.outputs.bump }}
 
     - name: Create Git tag
