@@ -1,0 +1,21 @@
+button {
+  margin-top: 20px;
+  font-size: 16px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+
+  &:hover {
+    background-color: #1976D2;
+    color: white;
+  }
+
+  &:disabled {
+    background-color: #B0BEC5;
+    color: #757575;
+    cursor: not-allowed;
+  }
+}

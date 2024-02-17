@@ -1,0 +1,64 @@
+<div
+  style="
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  "
+>
+  <form (ngSubmit)="onSubmit()" #formulaireForm="ngForm" style="width: 250px">
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Prénom</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Prénom"
+        name="firstname"
+        [(ngModel)]="firstname"
+        required
+      />
+    </mat-form-field>
+
+    <br />
+
+    <mat-form-field appearance="outline" style="width: 100%">
+      <mat-label>Nom</mat-label>
+      <input
+        matInput
+        type="text"
+        placeholder="Nom"
+        name="nom"
+        [(ngModel)]="lastname"
+        required
+      />
+    </mat-form-field>
+
+    <br />
+
+<!--    &lt;!&ndash; Message d'erreur &ndash;&gt;-->
+<!--    <div-->
+<!--      *ngIf="messageError"-->
+<!--      style="color: red; text-align: center; width: 100%; white-space: normal"-->
+<!--    >-->
+<!--      {{ messageError }}-->
+<!--    </div>-->
+<!--    <br />-->
+
+    <!-- pour le bouton: *ngIf="!isLoad; else loadingSpinner"-->
+
+    <div style="display: flex; justify-content: center">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!formulaireForm.form.valid"
+      >
+        Envoyer
+      </button>
+
+<!--      <ng-template #loadingSpinner>-->
+<!--        <mat-spinner diameter="50" color="accent"></mat-spinner>-->
+<!--      </ng-template>-->
+    </div>
+  </form>
+</div>
