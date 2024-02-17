@@ -1,0 +1,59 @@
+name: Version Bump
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  version-bump:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 14
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Determine version bump
+      id: version
+      run: |
+        BRANCH_NAME=$(echo ${{ github.head_ref }} | tr '[:upper:]' '[:lower:]')
+        if [[ $BRANCH_NAME == "fix_"* ]]; then
+          echo "Bump patch version"
+          echo "::set-output name=bump::patch"
+        elif [[ $BRANCH_NAME == "feature_"* ]]; then
+          echo "Bump minor version"
+          echo "::set-output name=bump::minor"
+        elif [[ $BRANCH_NAME == "release_"* ]]; then
+          echo "Bump major version"
+          echo "::set-output name=bump::major"
+        else
+          echo "Unsupported branch naming convention"
+          exit 1
+        fi
+
+    - name: Bump version
+      run: |
+        npm version ${{ steps.version.outputs.bump }}
+
+    - name: Create Git tag
+      run: git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release"
+
+    - name: Update Docker image version in docker-compose
+      run: sed -i "s/image: \"rdv-app_backend:.*/image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"/" docker-compose.yml
+
+    - name: Commit and push version change and tag
+      run: |
+        git config user.email "actions@github.com"
+        git config user.name "GitHub Actions"
+        git add package.json package-lock.json docker-compose.yml
+        git commit -m "Bump version to $(node -p "require('./package.json').version")"
+        git push
+        git push origin "TAG_back-end_$(node -p "require('./package.json').version")"

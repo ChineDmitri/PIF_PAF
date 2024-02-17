@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  rdv-app:
+    container_name: "rdv-app_backend"
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: "rdv-app_backend:0.0.1"
+    ports:
+      - "3000:3000"
+    networks:
+      - backend-network
+    depends_on:
+      - mysql-db
+      
+  mysql-db:
+    container_name: "rdv-app_bdd"
+    build:
+      context: .
+      dockerfile: Dockerfile.bdd
+    image: "rdv-app_bdd:0.0.1"
+    ports:
+      - "3310:3306"
+    networks:
+      - backend-network
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: rdv
+      MYSQL_USER: student
+      MYSQL_PASSWORD: student
+
+networks:
+  backend-network:
+    driver: bridge
+
+
+    

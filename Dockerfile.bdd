@@ -1,0 +1,12 @@
+# Use the official MySQL image as a base image
+FROM mysql:8
+
+# Set environment variables for MySQL
+ENV MYSQL_DB_HOST=mysql-db \
+    MYSQL_DATABASE=rdv \
+    MYSQL_USER=student \
+    MYSQL_PASSWORD=student \
+    MYSQL_ROOT_PASSWORD=rootsuper
+
+# Expose the MySQL port
+EXPOSE 3306

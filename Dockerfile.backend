@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:18
 
 WORKDIR . .
 
@@ -7,6 +7,9 @@ COPY package.json ./
 RUN npm install
 
 COPY . .
+
+# ENV PORT=3000
+# EXPOSE $PORT
 
 EXPOSE 3000
 
