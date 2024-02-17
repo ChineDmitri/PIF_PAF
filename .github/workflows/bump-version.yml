@@ -2,8 +2,9 @@ name: Version Bump and Merge
 
 on:
   pull_request:
-    types:
-      - closed
+    branches:
+      - 'main'
+    types: [closed]
 
 jobs:
   version-bump:
