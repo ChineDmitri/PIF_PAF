@@ -1,4 +1,4 @@
-name: Version Bump
+name: Version Bump and Merge
 
 on:
   pull_request:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   version-bump:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
@@ -35,7 +35,7 @@ jobs:
           echo "Bump major version"
           echo "::set-output name=bump::major"
         else
-          echo "Unsupported branch naming convention"
+          echo "Unsupported branch naming convention: $BRANCH_NAME"
           exit 1
         fi
 
@@ -46,9 +46,9 @@ jobs:
     - name: Create Git tag
       run: git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release"
 
-    - name: Update Docker image version in docker-compose
-      run: sed -i "s/image: \"rdv-app_backend:.*/image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"/" docker-compose.yml
-
+      - name: Update Docker image version in docker-compose
+      run: sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
+      
     - name: Commit and push version change and tag
       run: |
         git config user.email "actions@github.com"
@@ -57,3 +57,6 @@ jobs:
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
         git push
         git push origin "TAG_back-end_$(node -p "require('./package.json').version")"
+
+    - name: Close Pull Request
+      run: gh pr close -R ${{ github.repository }} -N ${{ github.event.number }}
