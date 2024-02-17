@@ -16,7 +16,7 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: cc
+          MYSQL_DATABASE: rdv
           MYSQL_USER: student
           MYSQL_PASSWORD: student
         ports:
