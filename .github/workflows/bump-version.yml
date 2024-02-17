@@ -48,7 +48,8 @@ jobs:
       run: git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release"
 
     - name: Update Docker image version in docker-compose
-      run: sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p \"require('./package.json').version\")\"|" docker-compose.yml
+      run: |
+        sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p \"require('./package.json').version\")\"|" docker-compose.yml
 
     - name: Commit and push version change and tag
       run: |
