@@ -60,7 +60,7 @@ jobs:
         # Commit and push version change and tag
         git add package.json package-lock.json docker-compose.yml
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
-        git push origin HEAD --follow-tags  
+        git push origin HEAD --follow-tags -u ${GH_TOKEN}
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
