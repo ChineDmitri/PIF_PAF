@@ -10,9 +10,7 @@ export class ApiService {
 
   constructor(private _http: HttpClient) {}
 
-  // Une modification
-  // cette fois c'est la bonne
-  // Cette fois c'est la vraie bonne
+  // Tentative lint
 
   envoyerInfo(lastname: string, firstname: string): any {
     return this._http.post(this._apiUrl,
