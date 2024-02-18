@@ -84,25 +84,10 @@ jobs:
         with:
           branch : back_end
           force_with_lease: true
+          tags: 'BACK-END_${{ github.actor }}-${{ github.run_number }}'
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Update main
-        run: |
-          git checkout main
-
-          # Resetting changes from back-end
-          git checkout --theirs back-end .
-      
-          git commit -m "Copy file from back-end $(node -p "require('./package.json').version")"
-      
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.7.0
-        with:
-          branch: main
-          force_with_lease: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     # - name: Create Git tag
     #   run: git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release"
