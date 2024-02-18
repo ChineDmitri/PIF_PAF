@@ -13,7 +13,6 @@ export class ApiService {
   // Une modification
   // Nouvelle modification
   // Encore nouvelle modification
-  // Encore une nouvelle modification ENCORE
 
   envoyerInfo(lastname: string, firstname: string): any {
     return this._http.post(this._apiUrl,
