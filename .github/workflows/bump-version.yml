@@ -82,6 +82,7 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@v0.7.0
         with:
+          branch : back_end
           force_with_lease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -90,11 +91,14 @@ jobs:
         run: |
           git checkout origin main 
 
+          git checkout --theirs back-end .
+
           git commit -m "Copy file from back-end $(node -p "require('./package.json').version")"
       
       - name: Push changes
         uses: ad-m/github-push-action@v0.7.0
         with:
+          branch: main
           force_with_lease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
