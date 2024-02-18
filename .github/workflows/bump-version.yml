@@ -92,6 +92,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
+      - name: Update main
+        run: |
+          git checkout main 
+
+          git commit -m "Copy file from back-end $(node -p "require('./package.json').version")"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.7.0
+        with:
+          force_with_lease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
     # - name: Create Git tag
     #   run: git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release"
 
