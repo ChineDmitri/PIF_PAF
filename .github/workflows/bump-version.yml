@@ -1,10 +1,13 @@
 name: docker image testing
 
 on:
+  push:
+    branches:
+      - 'front'
   pull_request:
     branches:
       - 'front'
-    types: [closed]
+    types: [ opened, synchronize, reopened, closed ]
 
 jobs:
   image-docker-testing:
