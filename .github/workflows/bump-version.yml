@@ -41,12 +41,12 @@ jobs:
 
     - name: Bump version and update Docker image
       run: |
-        git config user.email "actions@github.com"
-        git config user.name "GitHub Actions"
         npm version ${{ env.bump }}
         sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
         git add package.json package-lock.json docker-compose.yml
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
+        git config user.email "actions@github.com"
+        git config user.name "GitHub Actions"
         git push origin HEAD
         git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release $(node -p "require('./package.json').version")"
         git push origin "TAG_back-end_$(node -p "require('./package.json').version")"
