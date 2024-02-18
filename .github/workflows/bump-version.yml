@@ -3,64 +3,124 @@ name: Version Bump and Merge
 on:
   pull_request:
     branches:
-      - 'main'
+      - 'back-end'
     types: [closed]
 
 jobs:
-  version-bump:
-    runs-on: ubuntu-latest
+   version-bump:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    - name: Install dependencies
-      run: npm install
+      - name: Check if pull request was merged
+        run: |
+          if [ "${{ github.event.pull_request.merged }}" == "true" ]; then
+            echo "Pull request was merged, go to bump version."
+            exit 0
+          else
+            echo "Pull request was not merged, no bump version."
+            exit 1
+          fi
 
-    - name: Determine version bump
-      id: version
-      run: |
-        BRANCH_NAME=$(echo ${{ github.head_ref }} | tr '[:upper:]' '[:lower:]')
-        if [[ $BRANCH_NAME == "fix_"* ]]; then
-          echo "Bump patch version"
-          echo "::set-output name=bump::patch"
-        elif [[ $BRANCH_NAME == "feature_"* ]]; then
-          echo "Bump minor version"
-          echo "::set-output name=bump::minor"
-        elif [[ $BRANCH_NAME == "release_"* ]]; then
-          echo "Bump major version"
-          echo "::set-output name=bump::major"
-        else
-          echo "Unsupported branch naming convention: $BRANCH_NAME"
-          exit 1
-        fi
+      - name: Install dependencies
+        run: npm install
 
-    - name: Bump version
-      run: |
-        git config --global user.email "dmitri.chine@gmail.com"
-        git config --global user.name "Dmitri Chine"
-        npm version ${{ steps.version.outputs.bump }}
+      - name: Determine version bump
+        id: version
+        run: |
+          BRANCH_NAME=$(echo ${{ github.head_ref }} | tr '[:upper:]' '[:lower:]')
+          if [[ $BRANCH_NAME == "fix_"* ]]; then
+            echo "bump=patch" >> $GITHUB_ENV
+          elif [[ $BRANCH_NAME == "feature_"* ]]; then
+            echo "bump=minor" >> $GITHUB_ENV
+          elif [[ $BRANCH_NAME == "release_"* ]]; then
+            echo "bump=major" >> $GITHUB_ENV
+          else
+            echo "Unsupported branch naming convention: $BRANCH_NAME"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-    - name: Create Git tag
-      run: git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release"
+      - name: Bump version and update Docker image
+        run: |
+          git config --global user.email "actions@github.com"
+          git config --global user.name "GitHub Actions"
 
-    - name: Update Docker image version in docker-compose
-      run: |
-        sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
-        
-    - name: Commit and push version change and tag
-      run: |
-        git config user.email "actions@github.com"
-        git config user.name "GitHub Actions"
-        git add package.json package-lock.json docker-compose.yml
-        git commit -m "Bump version to $(node -p "require('./package.json').version")"
-        git push
-        git push origin "TAG_back-end_$(node -p "require('./package.json').version")"
+          # export GIT_ASKPASS="$PWD/askpass.sh"
+          # echo '#!/bin/sh' > askpass.sh
+          # echo "echo '${{ secrets.GH_TOKEN }}'" >> askpass.sh
+          # chmod +x askpass.sh
 
-    - name: Close Pull Request
-      run: gh pr close -R ${{ github.repository }} -N ${{ github.event.number }}
+          git checkout back-end
+
+          # Run npm version after ensuring a clean working directory
+          npm version ${{ env.bump }}
+
+          # Update Docker image version in docker-compose
+          sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
+
+          # Commit changes
+          git add package.json package-lock.json docker-compose.yml
+          git commit -m "Bump version to $(node -p "require('./package.json').version")"
+
+          # Push changes and tags to the specific branch
+          # git push origin back-end -u ${GH_TOKEN}
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.7.0
+        with:
+          branch : back_end
+          force_with_lease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Update main
+        run: |
+          git checkout main
+
+          # Resetting changes from back-end
+          git checkout --theirs back-end .
+      
+          git commit -m "Copy file from back-end $(node -p "require('./package.json').version")"
+      
+      - name: Push changes
+        uses: ad-m/github-push-action@v0.7.0
+        with:
+          branch: main
+          force_with_lease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+    # - name: Create Git tag
+    #   run: git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release"
+
+    # - name: Update Docker image version in docker-compose
+    #   run: |
+    #     sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
+
+    # - name: Commit and push version change and tag
+    #   run: |
+    #     git config user.email "actions@github.com"
+    #     git config user.name "GitHub Actions"
+    #     git add package.json package-lock.json docker-compose.yml
+    #     git commit -m "Bump version to $(node -p "require('./package.json').version")"
+    #     git push
+    #     git push origin "TAG_back-end_$(node -p "require('./package.json').version")"
+    #   env:
+    #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+    # - name: Close Pull Request
+    #   run: gh pr close -R ${{ github.repository }} -N ${{ github.event.number }}
