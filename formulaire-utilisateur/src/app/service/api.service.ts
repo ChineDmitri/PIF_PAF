@@ -10,14 +10,16 @@ export class ApiService {
 
   constructor(private _http: HttpClient) {}
 
+  // modif
+
   envoyerInfo(lastname: string, firstname: string): any {
     return this._http.post(this._apiUrl,
-      { "firstName": firstname, "lastName": lastname } 
+      { "firstName": firstname, "lastName": lastname }
     ).pipe(
       map((response: any) => {
         if (response.message)
           return response.message;
-        else 
+        else
           return null;
       })
     );
