@@ -3,7 +3,7 @@ name: Version Bump and Merge
 on:
   pull_request:
     branches:
-      - 'main'
+      - 'back-end'
     types: [closed]
 
 jobs:
@@ -52,7 +52,7 @@ jobs:
     - name: Update Docker image version in docker-compose
       run: |
         sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
-        
+
     - name: Commit and push version change and tag
       run: |
         git config user.email "actions@github.com"
