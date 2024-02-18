@@ -57,9 +57,11 @@ jobs:
         # Update Docker image version in docker-compose
         sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
     
-        # Commit and push version change and tag
+        # Commit changes
         git add package.json package-lock.json docker-compose.yml
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
+    
+        # Push changes and tags
         git push origin HEAD --follow-tags -u ${GH_TOKEN}
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
