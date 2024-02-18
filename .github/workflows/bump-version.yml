@@ -61,6 +61,8 @@ jobs:
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
         git push
         git push origin "TAG_back-end_$(node -p "require('./package.json').version")"
-
-    - name: Close Pull Request
-      run: gh pr close -R ${{ github.repository }} -N ${{ github.event.number }}
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      
+    # - name: Close Pull Request
+    #   run: gh pr close -R ${{ github.repository }} -N ${{ github.event.number }}
