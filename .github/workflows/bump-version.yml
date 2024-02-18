@@ -76,12 +76,6 @@ jobs:
 
           # Push changes and tags to the specific branch
           # git push origin back-end -u ${GH_TOKEN}
-
-          git checkout main 
-
-          git checkout --theirs back-end .
-
-          git commit -m "Update branche main"
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
