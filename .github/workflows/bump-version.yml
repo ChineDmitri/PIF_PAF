@@ -19,8 +19,8 @@ jobs:
         with:
           node-version: 18.16
 
-      - name: Debug directory contents
-        run: ls -al
+      - name: Access to project directory
+        run: cd formulaire-utilisateur/
 
       - name: Install dependencies
         run: npm install
