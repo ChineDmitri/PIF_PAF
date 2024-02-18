@@ -40,6 +40,9 @@ jobs:
       - name: Check application response
         run: curl http://localhost:8080
 
+      - name: Run Lint inside the container
+        run: docker container exec front-container npm run lint
+
       - name: Cleanup
         run: docker container stop front-container && docker container rm front-container
 
