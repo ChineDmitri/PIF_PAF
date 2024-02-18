@@ -46,12 +46,12 @@ jobs:
 
         git checkout back-end
 
-        # # Check Git status
-        # git status
+        # Check Git status
+        git status
     
-        # # If there are changes, either commit or discard them
-        # git add .
-        # git diff --cached --quiet || git commit -m "Committing changes before version bump"
+        # If there are changes, either commit or discard them
+        git add .
+        git diff --cached --quiet || git commit -m "Committing changes before version bump"
     
         # Run npm version after ensuring a clean working directory
         npm version ${{ env.bump }}
