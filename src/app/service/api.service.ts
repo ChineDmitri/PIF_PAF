@@ -11,6 +11,7 @@ export class ApiService {
   constructor(private _http: HttpClient) {}
 
   // Une modification
+  // cette fois c'est la bonne
 
   envoyerInfo(lastname: string, firstname: string): any {
     return this._http.post(this._apiUrl,
