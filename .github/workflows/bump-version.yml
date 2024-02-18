@@ -23,7 +23,7 @@ jobs:
         run: npm install
 
       - name: Build Docker image
-        run: docker image build --tag=formulaire-user-img -f ./Dockerfile.frontend
+        run: docker image build --tag=formulaire-user-img -f ./Dockerfile.frontend ./
 
       - name: Tag Docker image
         run: docker image tag formulaire-user-img:latest formulaire-user-img:1.0.0
