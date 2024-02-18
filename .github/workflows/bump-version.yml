@@ -14,9 +14,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Access to project directory
-        run: cd formulaire-utilisateur/
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
