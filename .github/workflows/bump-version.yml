@@ -27,26 +27,25 @@ jobs:
       run: |
         BRANCH_NAME=$(echo ${{ github.head_ref }} | tr '[:upper:]' '[:lower:]')
         if [[ $BRANCH_NAME == "fix_"* ]]; then
-          echo "Bump patch version"
-          echo "::set-output name=bump::patch"
+          echo "bump=patch" >> $GITHUB_ENV
         elif [[ $BRANCH_NAME == "feature_"* ]]; then
-          echo "Bump minor version"
-          echo "::set-output name=bump::minor"
+          echo "bump=minor" >> $GITHUB_ENV
         elif [[ $BRANCH_NAME == "release_"* ]]; then
-          echo "Bump major version"
-          echo "::set-output name=bump::major"
+          echo "bump=major" >> $GITHUB_ENV
         else
           echo "Unsupported branch naming convention: $BRANCH_NAME"
           exit 1
         fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     - name: Bump version and update Docker image
       run: |
-        npm version ${{ steps.version.outputs.bump }}
-        sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
-        git add package.json package-lock.json docker-compose.yml
         git config user.email "actions@github.com"
         git config user.name "GitHub Actions"
+        npm version ${{ env.bump }}
+        sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
+        git add package.json package-lock.json docker-compose.yml
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
         git push origin HEAD
         git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release $(node -p "require('./package.json').version")"
