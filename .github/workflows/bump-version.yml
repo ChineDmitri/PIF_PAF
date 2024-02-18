@@ -40,29 +40,36 @@ jobs:
           exit 1
         fi
 
-    - name: Bump version
+    - name: Bump version and update Docker image
       run: |
         git config user.email "actions@github.com"
         git config user.name "GitHub Actions"
         npm version ${{ steps.version.outputs.bump }}
-
-    - name: Create Git tag
-      run: git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release"
-
-    - name: Update Docker image version in docker-compose
-      run: |
         sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
-
-    - name: Commit and push version change and tag
-      run: |
-        git config user.email "actions@github.com"
-        git config user.name "GitHub Actions"
         git add package.json package-lock.json docker-compose.yml
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
         git push
         git push origin "TAG_back-end_$(node -p "require('./package.json').version")"
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+    # - name: Create Git tag
+    #   run: git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release"
+
+    # - name: Update Docker image version in docker-compose
+    #   run: |
+    #     sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
+        
+    # - name: Commit and push version change and tag
+    #   run: |
+    #     git config user.email "actions@github.com"
+    #     git config user.name "GitHub Actions"
+    #     git add package.json package-lock.json docker-compose.yml
+    #     git commit -m "Bump version to $(node -p "require('./package.json').version")"
+    #     git push
+    #     git push origin "TAG_back-end_$(node -p "require('./package.json').version")"
+    #   env:
+    #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
       
     # - name: Close Pull Request
     #   run: gh pr close -R ${{ github.repository }} -N ${{ github.event.number }}
