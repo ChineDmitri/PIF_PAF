@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.backend
-    image: "rdv-app_backend:0.0.6"
+    image: "rdv-app_backend:0.0.7"
     ports:
       - "3000:3000"
     networks:
