@@ -12,6 +12,7 @@ export class ApiService {
 
   // Une modification
   // cette fois c'est la bonne
+  // Cette fois c'est la vraie bonne
 
   envoyerInfo(lastname: string, firstname: string): any {
     return this._http.post(this._apiUrl,
