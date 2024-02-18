@@ -7,13 +7,7 @@ on:
     types: [closed]
 
 jobs:
-  test-and-coverage:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Install dependencies
-        run: echo "hello"
-
-  version-bump:
+   version-bump:
     runs-on: ubuntu-22.04
     permissions:
       contents: write
