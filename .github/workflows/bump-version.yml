@@ -19,6 +19,16 @@ jobs:
       with:
         node-version: 18
 
+    - name: Check if pull request was merged
+      run: |
+        if [ "${{ github.event.pull_request.merged }}" == "true" ]; then
+          echo "Pull request was merged, skipping further actions."
+          exit 0
+        else
+          echo "Pull request was not merged, continue with further actions."
+          exit 1
+        fi
+
     - name: Install dependencies
       run: npm install
 
@@ -60,7 +70,7 @@ jobs:
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
 
         # Push changes and tags to the specific branch
-        git push -u origin back-end -u ${GH_TOKEN}
+        git push origin back-end 
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
