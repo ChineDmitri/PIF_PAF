@@ -46,25 +46,19 @@ jobs:
 
         git checkout back-end
 
-        git remote -v
-
-        # Check Git status
-        git status
-    
-        # If there are changes, either commit or discard them
         git add .
-        git diff --cached --quiet || git commit -m "Committing changes before version bump"
-    
+        
+        git commit -m "Committing changes before version bump"
         # Run npm version after ensuring a clean working directory
         npm version ${{ env.bump }}
-    
+
         # Update Docker image version in docker-compose
         sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
-    
+
         # Commit changes
         git add package.json package-lock.json docker-compose.yml
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
-    
+
         # Push changes and tags to the specific branch
         git push -u origin back-end -u ${GH_TOKEN}
       env:
