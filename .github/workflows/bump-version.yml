@@ -75,7 +75,7 @@ jobs:
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
 
         # Push changes and tags to the specific branch
-        git push origin back-end
+        git push origin back-end -u ${GH_TOKEN}
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
