@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ApiService } from '../service/api.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import {first} from "rxjs";
 
 @Component({
   selector: 'app-formulaire',
@@ -32,7 +31,7 @@ export class FormulaireComponent {
          },
          error: (error: HttpErrorResponse): void => {
            this.isLoad = false;
-    
+
            console.log('ERROR !');
            this.message = error.message;
          },

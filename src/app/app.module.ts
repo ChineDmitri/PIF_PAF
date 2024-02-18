@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, NgForm } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -22,7 +22,6 @@ import { CommonModule } from '@angular/common';
     BrowserAnimationsModule,
     CommonModule,
     MatInputModule,
-    FormsModule,
     MatButtonModule,
 
   ],
