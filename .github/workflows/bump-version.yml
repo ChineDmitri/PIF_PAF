@@ -89,10 +89,11 @@ jobs:
 
       - name: Update main
         run: |
-          git checkout origin main 
+          git checkout main
 
+          # Resetting changes from back-end
           git checkout --theirs back-end .
-
+      
           git commit -m "Copy file from back-end $(node -p "require('./package.json').version")"
       
       - name: Push changes
