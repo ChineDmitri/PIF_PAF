@@ -19,11 +19,8 @@ jobs:
         with:
           node-version: 18.16
 
-      - name: Access to project directory
-        run: cd formulaire-utilisateur/ && ls
-
       - name: Install dependencies
-        run: npm install
+        run: npm install formulaire-utilisateur/
 
       - name: Build Docker image
         run: docker image build --tag=formulaire-user-img ./
