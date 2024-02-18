@@ -73,9 +73,9 @@ jobs:
           # Commit changes
           git add package.json package-lock.json docker-compose.yml
           git commit -m "Bump version to $(node -p "require('./package.json').version")"
-
-          # Push changes and tags to the specific branch
-          # git push origin back-end -u ${GH_TOKEN}
+          
+          git tag -a "BACK-END_v$(node -p "require('./package.json').version")" -m "Back-end version $(node -p "require('./package.json').version")"
+          
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
@@ -84,7 +84,7 @@ jobs:
         with:
           branch : back_end
           force_with_lease: true
-          tags: 'BACK-END_${{ github.actor }}-${{ github.run_number }}'
+          tags: false
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
