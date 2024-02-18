@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'fix_*'
+      # - 'back-end_fix_*'
       - 'feature_*'
       - 'release_*'
 
