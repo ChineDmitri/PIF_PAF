@@ -63,10 +63,7 @@ jobs:
         # chmod +x askpass.sh
 
         git checkout back-end
-
-        git add .
         
-        git commit -m "Committing changes before version bump"
         # Run npm version after ensuring a clean working directory
         npm version ${{ env.bump }}
 
