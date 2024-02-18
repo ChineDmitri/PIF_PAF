@@ -14,16 +14,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Access to project directory
+        run: cd formulaire-utilisateur/
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18.16
 
       - name: Install dependencies
-        run: npm install formulaire-utilisateur/
+        run: npm install
 
       - name: Build Docker image
-        run: docker image build --tag=formulaire-user-img ./
+        run: docker image build --tag=formulaire-user-img ./formulaire-utilisateur
 
       - name: Tag Docker image
         run: docker image tag formulaire-user-img:latest formulaire-user-img:1.0.0
@@ -42,4 +45,3 @@ jobs:
 
       - name: Cleanup
         run: docker container stop front-container && docker container rm front-container
-
