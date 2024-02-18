@@ -9,6 +9,9 @@ on:
 jobs:
   version-bump:
     runs-on: ubuntu-latest
+    permissions:             
+      contents: write           
+      pull-requests: write  
 
     steps:
     - name: Checkout repository
@@ -54,10 +57,10 @@ jobs:
         git config --global user.email "actions@github.com"
         git config --global user.name "GitHub Actions"
 
-        export GIT_ASKPASS="$PWD/askpass.sh"
-        echo '#!/bin/sh' > askpass.sh
-        echo "echo '${{ secrets.GH_TOKEN }}'" >> askpass.sh
-        chmod +x askpass.sh
+        # export GIT_ASKPASS="$PWD/askpass.sh"
+        # echo '#!/bin/sh' > askpass.sh
+        # echo "echo '${{ secrets.GH_TOKEN }}'" >> askpass.sh
+        # chmod +x askpass.sh
 
         git checkout back-end
 
@@ -75,9 +78,16 @@ jobs:
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
 
         # Push changes and tags to the specific branch
-        git push origin back-end -u ${GH_TOKEN}
+        # git push origin back-end -u ${GH_TOKEN}
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+    - name: Push changes
+      uses: ad-m/github-push-action@v0.7.0
+      with:
+        force_with_lease: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
     # - name: Create Git tag
     #   run: git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release"
