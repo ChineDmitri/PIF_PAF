@@ -14,7 +14,6 @@ export class ApiService {
   // Nouvelle modification
   // Encore nouvelle modification
   // Encore une nouvelle modification ENCORE
-  // ENCORE une nouvelle modification
 
   envoyerInfo(lastname: string, firstname: string): any {
     return this._http.post(this._apiUrl,
