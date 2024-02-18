@@ -6,7 +6,6 @@ on:
       - 'fix_*'
       - 'feature_*'
       - 'release_*'
-      - 'back-end'
 
 jobs:
   test-and-coverage:
