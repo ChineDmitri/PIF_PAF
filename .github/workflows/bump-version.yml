@@ -48,7 +48,8 @@ jobs:
         sed -i "s|image: \"rdv-app_backend:.*|image: \"rdv-app_backend:$(node -p "require('./package.json').version")\"|" docker-compose.yml
         git add package.json package-lock.json docker-compose.yml
         git commit -m "Bump version to $(node -p "require('./package.json').version")"
-        git push
+        git push origin HEAD
+        git tag -a "TAG_back-end_$(node -p "require('./package.json').version")" -m "Tagging release $(node -p "require('./package.json').version")"
         git push origin "TAG_back-end_$(node -p "require('./package.json').version")"
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
