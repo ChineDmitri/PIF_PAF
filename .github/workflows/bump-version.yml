@@ -26,6 +26,7 @@ jobs:
           exit 0
         else
           echo "Pull request was not merged, continue with further actions."
+          exit 1
         fi
 
     - name: Install dependencies
