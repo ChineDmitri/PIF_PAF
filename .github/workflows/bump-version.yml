@@ -19,6 +19,15 @@ jobs:
       with:
         node-version: 18
 
+    - name: Check if pull request was merged
+      run: |
+        if [ "${{ github.event.pull_request.merged }}" == "true" ]; then
+          echo "Pull request was merged, skipping further actions."
+          exit 0
+        else
+          echo "Pull request was not merged, continue with further actions."
+        fi
+
     - name: Install dependencies
       run: npm install
 
