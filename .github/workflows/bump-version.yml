@@ -23,7 +23,7 @@ jobs:
           node-version: 18.16
 
       - name: Install dependencies
-        run: npm install
+        run: npm install ./formulaire-utilisateur
 
       - name: Build Docker image
         run: docker image build --tag=formulaire-user-img ./formulaire-utilisateur
@@ -45,3 +45,10 @@ jobs:
 
       - name: Cleanup
         run: docker container stop front-container && docker container rm front-container
+
+  prevent-merge-on-failure:
+    runs-on: ubuntu-22.04
+    if: failure()
+    steps:
+      - name: Fail the workflow
+        run: exit 1
