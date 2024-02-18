@@ -72,21 +72,20 @@ jobs:
 
           # Commit changes
           git add package.json package-lock.json docker-compose.yml
-          git tag -d "BACK-END_v$(node -p "require('./package.json').version")" -m "Back-end version $(node -p "require('./package.json').version")"
-          git tag "BACK-END_v$(node -p "require('./package.json').version")" -m "Back-end version $(node -p "require('./package.json').version")"
-          git commit -a -m "Bump version to $(node -p "require('./package.json').version")"
-          
+          git commit -m "Bump version to $(node -p "require('./package.json').version")"
+          git tag -a "BACK-END_v$(node -p "require('./package.json').version")" -m "Back-end version $(node -p "require('./package.json').version")"
+          git push origin back-end
           git push origin "BACK-END_v$(node -p "require('./package.json').version")"
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Push changes
-        uses: ad-m/github-push-action@v0.7.0
-        with:
-          branch : back_end
-          tags: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      # - name: Push changes
+      #   uses: ad-m/github-push-action@v0.7.0
+      #   with:
+      #     branch : back_end
+      #     tags: false
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
 
     # - name: Create Git tag
