@@ -31,7 +31,7 @@ jobs:
       - name: Run Docker container
         run: docker container run --name=front-container -p 8080:4200 formulaire-user-img:1.0.0
 
-      - name: Wait for constainer to start
+      - name: Wait for container to start
         run: sleep 10s
 
       - name: Check if application is running
@@ -41,5 +41,5 @@ jobs:
         run: curl http://localhost:8080
 
       - name: Cleanup
-        run: docker container stop front-container && docker containre rm front-container
+        run: docker container stop front-container && docker container rm front-container
 
